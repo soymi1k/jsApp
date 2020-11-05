@@ -33,4 +33,4 @@ function init() {                                           /* create function n
   toDoForm.addEventListener("submit", handleSubmit);        /* when const toDoForm sumbmit, activate handleSubmit */
 }
 
-init();                                                     /* function init */
+init();                                                     /* function init github init*/
