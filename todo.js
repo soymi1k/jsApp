@@ -4,7 +4,18 @@ const   toDoForm = document.querySelector(".js-toDoForm"),  /* toDoForm이라는
 
 const   TODOS_LS = "toDos";                                 /* create constant TODOS_LS take element "toDos" string */
 
-const toDos = [];                                           /* create const toDos as empty array */
+let toDos = [];                                             /* create constant toDos as empty array */
+
+ function deleteToDo(event) {                               /* create deleteToDo function */
+   const btn = event.target;                                /* constant btn even */
+   const li = btn.parentNode;                               /* constant li  */
+   toDoList.removeChild(li);                                /* remove li in toDoList */ 
+   const cleanToDos = toDos.filter(function(toDo) {         /* create cleanToDos */
+     return toDo.id !== parseInt(li.id);
+   });
+   toDos = cleanToDos;
+   saveToDos();
+ }
 
 function saveToDos() {                                      /* create function name saveToDos this function will save localstorage */
  localStorage.setItem(TODOS_LS, JSON.stringify(toDos));     /* localstorage can not save data type in Js(only save string) so JSON.stringify can change any Js's object to string */
@@ -17,6 +28,7 @@ function paintToDo(text) {                                  /* paintToDo라는 �
   const newId = toDos.length + 1;                           /* create constant name newId toDos element num +1 만큼 */
   span.innerText = text;                                    /* use const span and instert text(paintToDo(text)) in the span by .innerText */ 
   delBtn.innerText = "❌";                                  /* delBtn(button type)안에 ❌ 를 넣어줌 (.innertext) */
+  delBtn.addEventListener("click", deleteToDo);
   li.appendChild(delBtn);                                   /* create list by const li and append const delbtn */  
   li.appendChild(span);                                     /* create list by const li and append const span */ 
   li.id = newId                                             /* append id to constant name li as newId */
