@@ -4,15 +4,29 @@ const   toDoForm = document.querySelector(".js-toDoForm"),  /* toDoForm이라는
 
 const   TODOS_LS = "toDos";                                 /* create constant TODOS_LS take element "toDos" string */
 
+const toDos = [];                                           /* create const toDos as empty array */
+
+function saveToDos() {                                      /* create function name saveToDos this function will save localstorage */
+ localStorage.setItem(TODOS_LS, JSON.stringify(toDos));     /* localstorage can not save data type in Js(only save string) so JSON.stringify can change any Js's object to string */
+}
+
 function paintToDo(text) {                                  /* paintToDo라는 이름으로 함수 초기화 */ 
   const li = document.createElement("li");                  /* html에 li라는 이름으로 list 태그 생성 (create list in the html) */
   const delBtn = document.createElement("button");          /* html에 상수 delBtn 의 버튼 생성 */
-  delBtn.innerText = "❌";                                  /* delBtn(button type)안에 ❌ 를 넣어줌 (.innertext) */
   const span = document.createElement("span");              /* create const name of span -> create element span type in the html file */  
+  const newId = toDos.length + 1;                           /* create constant name newId toDos element num +1 만큼 */
   span.innerText = text;                                    /* use const span and instert text(paintToDo(text)) in the span by .innerText */ 
+  delBtn.innerText = "❌";                                  /* delBtn(button type)안에 ❌ 를 넣어줌 (.innertext) */
   li.appendChild(delBtn);                                   /* create list by const li and append const delbtn */  
   li.appendChild(span);                                     /* create list by const li and append const span */ 
-  toDoList.appendChild(li);                                 /* append toDoList by child(li) */ 
+  li.id = newId                                             /* append id to constant name li as newId */
+  toDoList.appendChild(li);                                 /* append toDoList by child(li) */
+  const toDoObj = {                                         /* create constant toDoObj for string  */
+    text: text,
+    id: newId
+  };
+  toDos.push(toDoObj);
+  saveToDos(); 
 }
 
 function handleSubmit(event) {                              /* function initialize that name is handleSubmit */
@@ -22,11 +36,15 @@ function handleSubmit(event) {                              /* function initiali
   toDoInput.value = "";                                     /* toDoInput initialize null */
 }
 
-function loadToDos() {                                      /* create function loadToDos */
-  const toDos = localStorage.getItem(TODOS_LS);             /* create constant name  toDos */
-  if (toDos !== null) {
+function loadToDos() {                                      /* after save toDos, loading toDos function */
+  const loadedToDos = localStorage.getItem(TODOS_LS);       /* create constant loadedToDos, take in localStorage constant TODOS_LS */ 
+   if (loadedToDos !== null) {                              /* when loadedToDos is not null, */
+     const parsedToDos = JSON.parse(loadedToDos);           /* create constant parsedToDos change loadedToDos as type parse */ 
+     parsedToDos.forEach(function(toDo) {                   /* mini function for eachtime */
+       paintToDo(toDo.text);
+     });
   }
-}
+} /* JSON mean Js Object notation */
 
 function init() {                                           /* create function name init */
   loadToDos();                                              /* access loadToDos */
